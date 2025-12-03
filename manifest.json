@@ -1,0 +1,10 @@
+{
+    "name" : "Job Tracker Extension",
+    "version" : "1.0",
+    "description" : "Mangage Job Applications Easily",
+    "manifest_version" : 3,
+    "action": {
+        "default_popup": "dist/popup.html",
+        "default_icon": "hello.png"
+    }
+}

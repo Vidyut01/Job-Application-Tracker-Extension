@@ -1,0 +1,14 @@
+# Editor
+.vscode/
+.idea/
+
+# Packages
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
