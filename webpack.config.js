@@ -6,7 +6,9 @@ module.exports = {
   mode: "production",
 
   entry: {
-    popup: "./src/popup.tsx",
+    // popup: "./src/popup.tsx",
+    sidepanel: "./src/sidepanel.tsx",
+    background: "./src/background.ts",
   },
 
   output: {
@@ -39,9 +41,9 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./public/popup.html",
-      filename: "popup.html",
-      chunks: ["popup"],
+      template: "./public/sidepanel.html",
+      filename: "sidepanel.html",
+      chunks: ["sidepanel"],
     }),
   ],
 
