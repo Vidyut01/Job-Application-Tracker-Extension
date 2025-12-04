@@ -2,6 +2,7 @@
   "name": "job-tracker-ext",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch"
@@ -11,6 +12,7 @@
   "license": "ISC",
   "description": "Manage Job Applications Easily",
   "dependencies": {
+    "idb": "^8.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

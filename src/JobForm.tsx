@@ -1,17 +1,36 @@
 import React, { useState } from 'react'
+import { addJob } from './controller'
+import { JobStatus } from './interfaces'
 
 export const JobForm: React.FC = () => {
     const [title, setTitle] =  useState('')
     const [company, setCompany] =  useState('')
     const [location, setLocation] =  useState('')
     const [link, setLink] =  useState('')
-    const [status, setStatus] =  useState('applied')
     const [description, setDescription] =  useState('')
     const [resume, setResume] =  useState<File | null>(null)
 
-    const submitInputs = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
+        const job = {
+            title,
+            company,
+            location,
+            link,
+            status: "applied" as JobStatus,
+            description,
+            // resume
+        };
+
+        await addJob(job);
+
+        setTitle('')
+        setCompany('')
+        setLocation('')
+        setLink('')
+        setDescription('')
+        setResume(null)
     }
 
     return (

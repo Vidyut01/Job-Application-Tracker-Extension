@@ -6,9 +6,9 @@ module.exports = {
   mode: "production",
 
   entry: {
-    // popup: "./src/popup.tsx",
     sidepanel: "./src/sidepanel.tsx",
     background: "./src/background.ts",
+    controller: "./src/controller.ts",
   },
 
   output: {
