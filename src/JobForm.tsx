@@ -1,36 +1,63 @@
 import React, { useState } from 'react'
 import { addJob } from './controller'
-import { JobStatus } from './interfaces'
+import { EmploymentType, JobStatus } from './interfaces'
+import { GOOGLE_CONFIG } from '../config/googleConfig'
 
 export const JobForm: React.FC = () => {
-    const [title, setTitle] =  useState('')
-    const [company, setCompany] =  useState('')
-    const [location, setLocation] =  useState('')
-    const [link, setLink] =  useState('')
-    const [description, setDescription] =  useState('')
-    const [resume, setResume] =  useState<File | null>(null)
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const [title, setTitle] =  useState('');
+    const [company, setCompany] =  useState('');
+    const [location, setLocation] =  useState('');
+    const [link, setLink] =  useState('');
+    const [description, setDescription] =  useState('');
+    const [status, setStatus] = useState<JobStatus>('Applied');
+    const [employmentType, setEmploymentType] = useState<EmploymentType>('Full-time')
+    const [extraDetails, setExtraDetails] = useState('');
+
 
     const submitInputs = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+
 
         const job = {
             title,
             company,
             location,
             link,
-            status: "applied" as JobStatus,
+            status,
             description,
-            // resume
+            employmentType,
+            extraDetails,
         };
 
-        await addJob(job);
+        try {
+            await addJob(job);
 
-        setTitle('')
-        setCompany('')
-        setLocation('')
-        setLink('')
-        setDescription('')
-        setResume(null)
+            setTitle('');
+            setCompany('');
+            setLocation('');
+            setLink('');
+            setDescription('');
+            setStatus('Applied');
+            setEmploymentType('Full-time');
+            setExtraDetails('');
+        }
+        catch (err) {
+            setError('Failed to save. Check your credentials.');
+        }
+        finally {
+            setLoading(false);
+        }
+
+    }
+
+    const openSheet = () => {
+        const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_CONFIG.spreadsheetId}`;
+        chrome.tabs.create({ url });
     }
 
     return (
@@ -46,7 +73,8 @@ export const JobForm: React.FC = () => {
                         id="title"
                         name="title" 
                         type="text" 
-                        placeholder="Title" 
+                        placeholder="Title"
+                        value={title}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition"
                     />
                 </div>
@@ -59,7 +87,8 @@ export const JobForm: React.FC = () => {
                         id="company"
                         name="company" 
                         type="text" 
-                        placeholder="Name" 
+                        placeholder="Name"
+                        value={company}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition"
                     />
                 </div>
@@ -72,7 +101,8 @@ export const JobForm: React.FC = () => {
                         id="location"
                         name="location" 
                         type="text" 
-                        placeholder="City, State" 
+                        placeholder="City, State"
+                        value={location}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition"
                     />
                 </div>
@@ -85,9 +115,45 @@ export const JobForm: React.FC = () => {
                         id="link"
                         name="link" 
                         type="url" 
-                        placeholder="URL" 
+                        placeholder="URL"
+                        value={link}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition"
                     />
+                </div>
+
+                <div className='flex items-center gap-4'>
+                    <label htmlFor="status" className='text-sm font-medium w-24 shrink-0'>Status</label>
+                    <select
+                        id="status"
+                        name="status"
+                        value={status}
+                        onChange={e => setStatus(e.target.value as JobStatus)}
+                        className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition bg-transparent"
+                    >
+                        <option value="applied">Applied</option>
+                        <option value="phone_screen">Phone Screen</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="withdrawn">Withdrawn</option>
+                    </select>
+                </div>
+
+                <div className='flex items-center gap-4'>
+                    <label htmlFor="employmentType" className='text-sm font-medium w-24 shrink-0'>Type</label>
+                    <select
+                        id="employmentType"
+                        name="employmentType"
+                        value={employmentType}
+                        onChange={e => setEmploymentType(e.target.value as EmploymentType)}
+                        className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition bg-transparent"
+                    >
+                        <option value="full-time">Full-time</option>
+                        <option value="part-time">Part-time</option>
+                        <option value="contract">Contract</option>
+                        <option value="internship">Internship</option>
+                        <option value="casual">Casual</option>
+                    </select>
                 </div>
 
                 <div className='flex gap-4'>
@@ -96,38 +162,43 @@ export const JobForm: React.FC = () => {
                         onChange={e => setDescription(e.target.value)} 
                         id="description"
                         name="description" 
-                        placeholder="Details" 
+                        placeholder="Details"
+                        value={description}
                         rows={4}
                         className="flex-1 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition resize-none"
                     ></textarea>
                 </div>
 
                 <div className='flex gap-4'>
-                    <label htmlFor="resume" className='text-sm font-medium w-24 shrink-0'>Resume</label>
-                    <div className='flex-1 border-2 border-dashed border-current rounded-lg p-6 hover:opacity-80 transition'>
-                        <label htmlFor="resume" className='flex flex-col items-center justify-center cursor-pointer'>
-                            <svg className='w-8 h-8 mb-2 opacity-60' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
-                            </svg>
-                            <span className='font-medium'>Upload</span>
-                            <span className='text-sm opacity-60'>{resume?.name || 'Click to select'}</span>
-                            <input 
-                                onChange={e => setResume(e.target.files?.[0] || null)} 
-                                id="resume"
-                                name="resume" 
-                                type="file" 
-                                className="hidden"
-                            />
-                        </label>
-                    </div>
+                    <label htmlFor="extraDetails" className='text-sm font-medium w-24 shrink-0 pt-3'>Extra Details</label>
+                    <textarea
+                        onChange={e => setExtraDetails(e.target.value)}
+                        id="extraDetails"
+                        name="extraDetails"
+                        placeholder="Salary, notes, referrals..."
+                        value={extraDetails}
+                        rows={3}
+                        className="flex-1 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition resize-none"
+                    ></textarea>
                 </div>
 
-                <button 
-                    type="submit" 
-                    className="px-14 py-3 border font-semibold rounded-lg transition mt-3 hover:bg-gray-700 active:bg-gray-800"
-                >
-                    Add Job
-                </button>
+                <div className='flex justify-evenly'>
+                    <button 
+                        type="submit"
+                        disabled={loading}
+                        className={`px-14 py-3 border font-semibold rounded-lg transition mt-3 active:bg-gray-800 ${ loading ? 'bg-gray-800 hover:bg-gray-800' : 'hover:bg-gray-700' }`}
+                    >
+                        {loading ? 'Adding...' : 'Add Job'}
+                    </button>
+
+                    <button 
+                        type='button' 
+                        onClick={openSheet}
+                        className="px-14 py-3 border font-semibold rounded-lg transition mt-3 bg-blue-500 hover:bg-blue-700 active:bg-blue-800"
+                    >
+                        Show Jobs
+                    </button>
+                </div>
             </form>
         </div>
     )

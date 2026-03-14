@@ -1,27 +1,13 @@
-import { DBSchema } from "idb";
-
-export type JobStatus = "applied" | "interviewing" | "offered" | "rejected";
-
-export interface JobTrackerDB extends DBSchema {
-  jobs: {
-    key: number;
-    value: Job;
-    // indexes: {
-    //   byStatus: JobStatus;
-    //   byCompany: string;
-    //   byCreatedAt: string;
-    // };
-  };
-}
+export type JobStatus = 'Applied' | 'Phone Screen' | 'Interview' | 'Offer' | 'Rejected' | 'Withdrawn';
+export type EmploymentType = 'Full-time' | 'Part-time' | 'Contract' | 'Internship' | 'Casual';
 
 export interface Job {
-    id?: number;
-    title: string;
-    company: string;
-    location: string;
-    description: string;
-    link: string;
-    dateApplied: string;
-    status: JobStatus;
+    title: string
+    company: string
+    location: string
+    link: string
+    status: JobStatus
+    description: string
+    employmentType: EmploymentType
+    extraDetails: string
 };
-
