@@ -6,6 +6,7 @@ import { GOOGLE_CONFIG } from '../config/googleConfig'
 export const JobForm: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [added, setAdded] = useState(false);
 
     const [title, setTitle] =  useState('');
     const [company, setCompany] =  useState('');
@@ -45,6 +46,9 @@ export const JobForm: React.FC = () => {
             setStatus('Applied');
             setEmploymentType('Full-time');
             setExtraDetails('');
+            
+            setAdded(true);
+            setTimeout(() => setAdded(false), 3000);
         }
         catch (err) {
             setError('Failed to save. Check your credentials.');
@@ -130,12 +134,12 @@ export const JobForm: React.FC = () => {
                         onChange={e => setStatus(e.target.value as JobStatus)}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition bg-transparent"
                     >
-                        <option value="applied">Applied</option>
-                        <option value="phone_screen">Phone Screen</option>
-                        <option value="interview">Interview</option>
-                        <option value="offer">Offer</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="withdrawn">Withdrawn</option>
+                        <option value="Applied">Applied</option>
+                        <option value="Phone Screen">Phone Screen</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Offer">Offer</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Withdrawn">Withdrawn</option>
                     </select>
                 </div>
 
@@ -148,11 +152,11 @@ export const JobForm: React.FC = () => {
                         onChange={e => setEmploymentType(e.target.value as EmploymentType)}
                         className="flex-1 min-w-0 px-4 py-3 border border-current rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 transition bg-transparent"
                     >
-                        <option value="full-time">Full-time</option>
-                        <option value="part-time">Part-time</option>
-                        <option value="contract">Contract</option>
-                        <option value="internship">Internship</option>
-                        <option value="casual">Casual</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Casual">Casual</option>
                     </select>
                 </div>
 
@@ -186,9 +190,9 @@ export const JobForm: React.FC = () => {
                     <button 
                         type="submit"
                         disabled={loading}
-                        className={`px-14 py-3 border font-semibold rounded-lg transition mt-3 active:bg-gray-800 ${ loading ? 'bg-gray-800 hover:bg-gray-800' : 'hover:bg-gray-700' }`}
+                        className={`px-14 py-3 border font-semibold rounded-lg transition mt-3 active:bg-gray-800 ${ loading ? 'bg-gray-800 hover:bg-gray-800' : 'hover:bg-gray-700' } ${added ? 'text-green-700 font-bold' : ''}`}
                     >
-                        {loading ? 'Adding...' : 'Add Job'}
+                        {added ? 'Added!' : loading ? 'Adding...' : 'Add Job'}
                     </button>
 
                     <button 
