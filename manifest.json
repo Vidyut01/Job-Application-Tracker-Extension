@@ -13,10 +13,34 @@
         "default_path": "dist/sidepanel.html"
     },
     "permissions": [
-        "sidePanel"
+        "sidePanel",
+        "scripting",
+        "tabs"
     ],
     "host_permissions": [
         "https://sheets.googleapis.com/*",
-        "https://oauth2.googleapis.com/*"
+        "https://oauth2.googleapis.com/*",
+
+        "https://*.linkedin.com/*",
+        "https://*.indeed.com/*",
+        "https://*.greenhouse.io/*",
+        "https://*.lever.co/*",
+        "https://*.ashbyhq.com/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://*.workable.com/*",
+        "https://*.smartrecruiters.com/*",
+        "https://*.glassdoor.com/*",
+        "https://*.seek.com.au/*",
+        "https://*.seek.com/*",
+        "https://*.wellfound.com/*",
+        "https://*.workatastartup.com/*",
+        "https://*.ziprecruiter.com/*",
+        "https://*.dice.com/*",
+        "https://*.builtin.com/*",
+        "https://*.naukri.com/*",
+        "https://*.bamboohr.com/*",
+        "https://*.icims.com/*",
+        "https://*.jobvite.com/*",
+        "https://*.simplify.jobs/*"
     ]
 }
